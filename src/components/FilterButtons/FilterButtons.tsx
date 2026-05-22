@@ -1,8 +1,9 @@
 import classNames from 'classnames';
+import { FilterType } from '../../types/FilterType';
 
 type FilterButtonsProps = {
-  filterBy: 'all' | 'active' | 'completed';
-  onFilter: (filter: 'all' | 'active' | 'completed') => void;
+  filterBy: FilterType;
+  onFilter: (filter: FilterType) => void;
 };
 
 export const FilterButtons = ({ filterBy, onFilter }: FilterButtonsProps) => {
@@ -11,10 +12,10 @@ export const FilterButtons = ({ filterBy, onFilter }: FilterButtonsProps) => {
       <a
         href="#/"
         className={classNames('filter__link', {
-          selected: filterBy === 'all',
+          selected: filterBy === FilterType.All,
         })}
         data-cy="FilterLinkAll"
-        onClick={() => onFilter('all')}
+        onClick={() => onFilter(FilterType.All)}
       >
         All
       </a>
@@ -22,9 +23,9 @@ export const FilterButtons = ({ filterBy, onFilter }: FilterButtonsProps) => {
       <a
         href="#/active"
         className={classNames('filter__link', {
-          selected: filterBy === 'active',
+          selected: filterBy === FilterType.Active,
         })}
-        onClick={() => onFilter('active')}
+        onClick={() => onFilter(FilterType.Active)}
         data-cy="FilterLinkActive"
       >
         Active
@@ -33,9 +34,9 @@ export const FilterButtons = ({ filterBy, onFilter }: FilterButtonsProps) => {
       <a
         href="#/completed"
         className={classNames('filter__link', {
-          selected: filterBy === 'completed',
+          selected: filterBy === FilterType.Completed,
         })}
-        onClick={() => onFilter('completed')}
+        onClick={() => onFilter(FilterType.Completed)}
         data-cy="FilterLinkCompleted"
       >
         Completed

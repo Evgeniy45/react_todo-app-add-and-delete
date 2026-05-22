@@ -1,10 +1,11 @@
+import { FilterType } from '../../types/FilterType';
 import { Todo } from '../../types/Todo';
 import { FilterButtons } from '../FilterButtons';
 
 type FooterProps = {
   todos: Todo[];
-  filterBy: 'all' | 'active' | 'completed';
-  onFilter: (filter: 'all' | 'active' | 'completed') => void;
+  filterBy: FilterType;
+  onFilter: (filter: FilterType) => void;
   onClear: () => void;
 };
 

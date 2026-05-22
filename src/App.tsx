@@ -9,28 +9,15 @@ import classNames from 'classnames';
 import { TodoList } from './components/TodoList';
 import { Footer } from './components/TodoFooter';
 import { TodoHeader } from './components/TodoHeader';
-
-function getFilteredTodos(
-  todosToFilter: Todo[],
-  filter: 'all' | 'active' | 'completed',
-) {
-  switch (filter) {
-    case 'active':
-      return todosToFilter.filter(todo => !todo.completed);
-    case 'completed':
-      return todosToFilter.filter(todo => todo.completed);
-    default:
-      return todosToFilter;
-  }
-}
+import { FilterType } from './types/FilterType';
+import { ErrorMessage } from './types/ErrorMessage';
+import { getFilteredTodos } from './utils/filterTodos';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [filterBy, setFilterBy] = useState<'all' | 'active' | 'completed'>(
-    'all',
-  );
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [filterBy, setFilterBy] = useState<FilterType>(FilterType.All);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage | null>(null);
   const [title, setTitle] = useState('');
   const [tempTodo, setTempTodo] = useState<Todo | null>(null);
   const [deleteIds, setDeletedIds] = useState<number[]>([]);
@@ -44,9 +31,9 @@ export const App: React.FC = () => {
     const trimmedTitle = title.trim();
 
     if (trimmedTitle.length === 0) {
-      setErrorMessage('Title should not be empty');
+      setErrorMessage(ErrorMessage.TitleShouldNotBeEmpty);
       setTimeout(() => {
-        setErrorMessage('');
+        setErrorMessage(null);
       }, 3000);
 
       return;
@@ -69,9 +56,9 @@ export const App: React.FC = () => {
         setTitle('');
       })
       .catch(() => {
-        setErrorMessage('Unable to add a todo');
+        setErrorMessage(ErrorMessage.UnableToCreateTodo);
         setTimeout(() => {
-          setErrorMessage('');
+          setErrorMessage(null);
         }, 3000);
       })
       .finally(() => {
@@ -89,9 +76,9 @@ export const App: React.FC = () => {
         setTodos(prevTodos => prevTodos.filter(todo => todo.id !== todoId));
       })
       .catch(() => {
-        setErrorMessage('Unable to delete a todo');
+        setErrorMessage(ErrorMessage.UnableToDeleteTodo);
         setTimeout(() => {
-          setErrorMessage('');
+          setErrorMessage(null);
         }, 3000);
       })
       .finally(() => {
@@ -110,13 +97,13 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    setErrorMessage('');
+    setErrorMessage(null);
     getTodos()
       .then(currentTodos => setTodos(currentTodos))
       .catch(() => {
-        setErrorMessage('Unable to load todos');
+        setErrorMessage(ErrorMessage.UnableToLoadTodos);
         setTimeout(() => {
-          setErrorMessage('');
+          setErrorMessage(null);
         }, 3000);
       })
       .finally(() => {
@@ -172,14 +159,14 @@ export const App: React.FC = () => {
           'is-danger',
           'is-light',
           'has-text-weight-normal',
-          { hidden: errorMessage === '' },
+          { hidden: errorMessage === null },
         )}
       >
         <button
           data-cy="HideErrorButton"
           type="button"
           className="delete"
-          onClick={() => setErrorMessage('')}
+          onClick={() => setErrorMessage(null)}
         />
         {errorMessage}
       </div>
