@@ -56,7 +56,7 @@ export const App: React.FC = () => {
         setTitle('');
       })
       .catch(() => {
-        setErrorMessage(ErrorMessage.UnableToCreateTodo);
+        setErrorMessage(ErrorMessage.UnableToAddTodo);
         setTimeout(() => {
           setErrorMessage(null);
         }, 3000);
